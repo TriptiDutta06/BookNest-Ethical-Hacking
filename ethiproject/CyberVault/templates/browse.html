@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Used Textbooks — BookNest{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 30px;">
+  <div class="container">
+
+    <!-- Page Header & Search Filter Bar -->
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 2.2rem; margin-bottom: 8px;">Campus Textbook Catalog</h1>
+      <p style="color: var(--text-secondary);">Browse available syllabus textbooks listed by students across all university departments.</p>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;">
+      <a href="{{ url_for('browse') }}" class="btn btn-sm {% if not category_filter %}btn-primary{% else %}btn-secondary{% endif %}">
+        All Departments
+      </a>
+      <a href="{{ url_for('browse', category='Computer Science') }}" class="btn btn-sm {% if category_filter == 'Computer Science' %}btn-primary{% else %}btn-secondary{% endif %}">
+        Computer Science
+      </a>
+      <a href="{{ url_for('browse', category='Data Science') }}" class="btn btn-sm {% if category_filter == 'Data Science' %}btn-primary{% else %}btn-secondary{% endif %}">
+        Data Science
+      </a>
+      <a href="{{ url_for('browse', category='Web Development') }}" class="btn btn-sm {% if category_filter == 'Web Development' %}btn-primary{% else %}btn-secondary{% endif %}">
+        Web Development
+      </a>
+      <a href="{{ url_for('browse', category='Engineering') }}" class="btn btn-sm {% if category_filter == 'Engineering' %}btn-primary{% else %}btn-secondary{% endif %}">
+        Core Engineering
+      </a>
+      <a href="{{ url_for('browse', category='Mathematics') }}" class="btn btn-sm {% if category_filter == 'Mathematics' %}btn-primary{% else %}btn-secondary{% endif %}">
+        Mathematics
+      </a>
+    </div>
+
+    <!-- Search Feedback Banner (Demonstration Point for Reflected XSS) -->
+    {% if search_query %}
+      <div class="search-feedback-banner">
+        <div>
+          {% if demo_mode %}
+            <!-- VULNERABLE DEMO MODE: Reflects query without safe HTML escaping -->
+            <p>Showing search results for: <strong>{{ search_query | safe }}</strong> ({{ books|length }} books found)</p>
+          {% else %}
+            <!-- SECURE MODE: Automatic context-aware Jinja2 output escaping -->
+            <p>Showing search results for: <strong>{{ search_query }}</strong> ({{ books|length }} books found)</p>
+          {% endif %}
+        </div>
+        <a href="{{ url_for('browse', category=category_filter) }}" class="btn btn-secondary btn-sm">Clear Search</a>
+      </div>
+    {% endif %}
+
+    <!-- Books Grid -->
+    {% if books %}
+      <div class="books-grid">
+        {% for book in books %}
+          <div class="book-card">
+            <!-- Cover preview -->
+            <div class="book-card-cover cover-{{ book.cover_theme }}">
+              <span class="book-condition-badge badge-{{ book.condition_slug }}">
+                {{ book.condition }}
+              </span>
+              <div class="book-cover-text">
+                <div class="cat">{{ book.category }}</div>
+                <div class="tit">{{ book.title }}</div>
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="book-card-body">
+              <div class="book-meta-top">
+                <span>Book #{{ book.id }}</span>
+                {% if book.is_available %}
+                  <span style="color: var(--accent-forest); font-weight: 600;">● Available</span>
+                {% else %}
+                  <span style="color: #ef4444; font-weight: 600;">● Sold</span>
+                {% endif %}
+              </div>
+
+              <h3 class="book-card-title" title="{{ book.title }}">{{ book.title }}</h3>
+              <div class="book-card-author">By {{ book.author }}</div>
+
+              <div class="book-seller-info">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>{{ book.seller_name }} ({{ book.seller_dept }})</span>
+              </div>
+
+              <div class="book-card-footer">
+                <div class="book-price-box">
+                  <span class="price">₹{{ book.price }}</span>
+                  <span class="mrp">₹{{ book.original_price }}</span>
+                </div>
+                <div class="book-actions">
+                  <a href="{{ url_for('wishlist_add', book_id=book.id) }}" class="icon-btn" title="Add to Wishlist" style="width: 34px; height: 34px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                  </a>
+                  <a href="{{ url_for('cart_add', book_id=book.id) }}" class="icon-btn" title="Add to Cart" style="width: 34px; height: 34px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="9" cy="21" r="1"></circle>
+                      <circle cx="20" cy="21" r="1"></circle>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                  </a>
+                  <a href="{{ url_for('book_detail', book_id=book.id) }}" class="btn btn-primary btn-sm">Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 50px; text-align: center; margin: 30px 0;">
+        <h3 style="font-size: 1.4rem; margin-bottom: 8px;">No Textbooks Found</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">We couldn't find any textbooks matching your current search or category filter.</p>
+        <a href="{{ url_for('browse') }}" class="btn btn-primary">Browse All Books</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

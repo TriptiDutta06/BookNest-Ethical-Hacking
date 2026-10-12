@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Student Login — BookNest{% endblock %}
+
+{% block content %}
+<div class="container auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="brand-logo-icon" style="margin: 0 auto 16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+      </div>
+      <h1>Student Login</h1>
+      <p>Sign in to manage your campus textbook listings, cart, and orders</p>
+    </div>
+
+    <!-- Login Form -->
+    <form action="{{ url_for('login') }}" method="POST">
+      <div class="form-group">
+        <label for="username_or_email">Email or Username</label>
+        <input type="text" name="username_or_email" id="username_or_email" class="form-control" placeholder="e.g. student@booknest.local or student" required autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+        Login to BookNest
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a href="{{ url_for('register') }}">Create an account</a></p>
+    </div>
+
+    <!-- Campus Demo Note (Helpful for evaluator) -->
+    <div style="margin-top: 24px; padding: 14px; background: var(--bg-surface-soft); border-radius: var(--radius-sm); border: 1px solid var(--border-color); font-size: 0.82rem; color: var(--text-secondary);">
+      <strong>Demo Accounts:</strong><br>
+      • Student: <code>student@booknest.local</code> / <code>student123</code><br>
+      • Peer: <code>rahul@booknest.local</code> / <code>rahul123</code><br>
+      • Admin: <code>admin@booknest.local</code> / <code>admin123</code>
+    </div>
+  </div>
+</div>
+{% endblock %}

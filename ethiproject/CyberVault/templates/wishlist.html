@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}My Saved Wishlist — BookNest{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 30px;">
+  <div class="container">
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 2.2rem; margin-bottom: 6px;">Saved Wishlist Textbooks</h1>
+      <p style="color: var(--text-secondary);">Keep track of textbooks you want to purchase for your upcoming modules</p>
+    </div>
+
+    {% if books %}
+      <div class="books-grid">
+        {% for book in books %}
+          <div class="book-card">
+            <div class="book-card-cover cover-{{ book.cover_theme }}">
+              <span class="book-condition-badge badge-{{ book.condition_slug }}">
+                {{ book.condition }}
+              </span>
+              <div class="book-cover-text">
+                <div class="cat">{{ book.category }}</div>
+                <div class="tit">{{ book.title }}</div>
+              </div>
+            </div>
+
+            <div class="book-card-body">
+              <div class="book-meta-top">
+                <span>Book #{{ book.id }}</span>
+                <span style="color: var(--accent-forest); font-weight: 600;">● Available</span>
+              </div>
+
+              <h3 class="book-card-title">{{ book.title }}</h3>
+              <div class="book-card-author">By {{ book.author }}</div>
+
+              <div class="book-seller-info">
+                <span>{{ book.seller_name }} ({{ book.seller_dept }})</span>
+              </div>
+
+              <div class="book-card-footer">
+                <div class="book-price-box">
+                  <span class="price">₹{{ book.price }}</span>
+                  <span class="mrp">₹{{ book.original_price }}</span>
+                </div>
+                <div class="book-actions">
+                  <a href="{{ url_for('wishlist_remove', book_id=book.id) }}" class="icon-btn" title="Remove from Wishlist" style="width: 34px; height: 34px; color: #ef4444;">
+                    ✕
+                  </a>
+                  <a href="{{ url_for('cart_add', book_id=book.id) }}" class="btn btn-primary btn-sm">
+                    Move to Cart
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 50px; text-align: center; margin: 30px 0;">
+        <div style="font-size: 3rem; margin-bottom: 12px;">❤️</div>
+        <h3 style="font-size: 1.4rem; margin-bottom: 8px;">Your Wishlist is Empty</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Save textbooks you might need later by clicking the heart icon on any textbook card.</p>
+        <a href="{{ url_for('browse') }}" class="btn btn-primary">Browse Textbooks</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

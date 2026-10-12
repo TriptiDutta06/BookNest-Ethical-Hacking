@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Campus Checkout — BookNest{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 30px;">
+  <div class="container">
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 2.2rem; margin-bottom: 6px;">Confirm Campus Order</h1>
+      <p style="color: var(--text-secondary);">Select your preferred campus meetup spot to inspect the books and finalize exchange</p>
+    </div>
+
+    <div class="checkout-grid">
+      <!-- Left: Meetup & Payment Form -->
+      <div>
+        <form action="{{ url_for('checkout') }}" method="POST" class="auth-card" style="max-width: 100%; box-shadow: var(--shadow-sm);">
+          <h3 style="font-size: 1.3rem; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+            1. Campus Meetup Drop-Point
+          </h3>
+
+          <div class="form-group">
+            <label for="delivery_location">Designated Campus Exchange Zone</label>
+            <select name="delivery_location" id="delivery_location" class="form-control" required>
+              <option value="Central Campus Library - Desk 4 (Ground Floor)">Central Campus Library - Desk 4 (Ground Floor)</option>
+              <option value="Student Union Cafeteria - Near Coffee Bar">Student Union Cafeteria - Near Coffee Bar</option>
+              <option value="Tech Innovation Hub Lounge">Tech Innovation Hub Lounge</option>
+              <option value="Academic Block B - Entrance Foyer">Academic Block B - Entrance Foyer</option>
+            </select>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
+              Both buyer and seller receive an in-app order confirmation with handover details.
+            </p>
+          </div>
+
+          <h3 style="font-size: 1.3rem; margin-top: 30px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+            2. Payment Method
+          </h3>
+
+          <div class="form-group">
+            <label>Payment Mode (Paid directly upon textbook inspection)</label>
+            <div style="margin-top: 8px;">
+              <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: normal; cursor: pointer;">
+                <input type="radio" name="payment_method" value="Campus UPI / QR Code on Meetup" checked>
+                <span><strong>Instant UPI / QR Code</strong> (GooglePay / PhonePe / Paytm on meetup)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; font-weight: normal; cursor: pointer;">
+                <input type="radio" name="payment_method" value="Cash on Campus Handoff">
+                <span><strong>Exact Cash</strong> on handoff after inspecting book condition</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 24px;">
+            Confirm Campus Order (₹{{ subtotal }})
+          </button>
+        </form>
+      </div>
+
+      <!-- Right: Order Overview -->
+      <div>
+        <div class="summary-card">
+          <h3>Order Overview</h3>
+          {% for item in items %}
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem;">
+              <span>{{ item.title }} (x{{ item.quantity }})</span>
+              <span style="font-weight: 600;">₹{{ item.price * item.quantity }}</span>
+            </div>
+          {% endfor %}
+
+          <div class="summary-total" style="margin-top: 20px;">
+            <span>Total to Pay</span>
+            <span style="color: var(--primary);">₹{{ subtotal }}</span>
+          </div>
+
+          <div style="margin-top: 20px; background: var(--bg-surface-soft); padding: 14px; border-radius: var(--radius-md); font-size: 0.82rem; color: var(--text-secondary);">
+            🔒 <strong>100% Student Protection:</strong> You only complete the transfer after meeting in person and verifying all chapters and condition notes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

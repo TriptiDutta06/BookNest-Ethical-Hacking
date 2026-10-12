@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Register Student Account — BookNest{% endblock %}
+
+{% block content %}
+<div class="container auth-wrapper">
+  <div class="auth-card" style="max-width: 520px;">
+    <div class="auth-header">
+      <h1>Create Account</h1>
+      <p>Join university peers to exchange, buy and sell syllabus textbooks</p>
+    </div>
+
+    <!-- Registration Form -->
+    <form action="{{ url_for('register') }}" method="POST">
+      <div class="form-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" name="full_name" id="full_name" class="form-control" placeholder="e.g. Aarav Sharma" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" class="form-control" placeholder="e.g. aarav_cs" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Campus Email</label>
+          <input type="email" name="email" id="email" class="form-control" placeholder="aarav@booknest.local" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="department">Academic Department</label>
+        <select name="department" id="department" class="form-control">
+          <option value="Computer Science">Computer Science</option>
+          <option value="Data Science">Data Science & AI</option>
+          <option value="Web Technologies">Information Technology</option>
+          <option value="Core Engineering">Core Engineering</option>
+          <option value="Business Management">Business Management</option>
+          <option value="Mathematics">Mathematics</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" class="form-control" placeholder="••••••••" required>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="••••••••" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+        Create Student Account
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a href="{{ url_for('login') }}">Log in here</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

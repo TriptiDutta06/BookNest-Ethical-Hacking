@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}My Cart — BookNest{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 30px;">
+  <div class="container">
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 2.2rem; margin-bottom: 6px;">Campus Shopping Cart</h1>
+      <p style="color: var(--text-secondary);">Review your selected course textbooks prior to arranging campus handover</p>
+    </div>
+
+    {% if items %}
+      <div class="checkout-grid">
+        <!-- Left: Cart Table -->
+        <div class="table-card">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th>Textbook</th>
+                <th>Condition</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+                <tr>
+                  <td>
+                    <div style="font-weight: 700; color: var(--text-main);">{{ item.title }}</div>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">By {{ item.author }}</div>
+                  </td>
+                  <td>
+                    <span class="pill" style="font-size: 0.78rem; font-weight: 600; background: var(--bg-surface-soft); padding: 3px 8px; border-radius: 4px;">
+                      {{ item.condition }}
+                    </span>
+                  </td>
+                  <td>₹{{ item.price }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td style="font-weight: 700; color: var(--primary);">₹{{ item.price * item.quantity }}</td>
+                  <td>
+                    <a href="{{ url_for('cart_remove', book_id=item.book_id) }}" style="color: #ef4444; font-size: 0.85rem; font-weight: 600;">
+                      Remove
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right: Summary Card -->
+        <div>
+          <div class="summary-card">
+            <h3>Order Summary</h3>
+            <div class="summary-row">
+              <span>Items ({{ items|length }})</span>
+              <span>₹{{ subtotal }}</span>
+            </div>
+            <div class="summary-row">
+              <span>Campus Meetup Delivery</span>
+              <span style="color: var(--accent-forest); font-weight: 600;">FREE (Library/Cafe)</span>
+            </div>
+            <div class="summary-row">
+              <span>Platform Commission</span>
+              <span style="color: var(--accent-forest); font-weight: 600;">₹0 (Zero Fees)</span>
+            </div>
+
+            <div class="summary-total">
+              <span>Total Payable</span>
+              <span>₹{{ subtotal }}</span>
+            </div>
+
+            <div style="margin-top: 24px;">
+              <a href="{{ url_for('checkout') }}" class="btn btn-primary btn-lg" style="width: 100%;">
+                Proceed to Checkout &rarr;
+              </a>
+              <a href="{{ url_for('browse') }}" class="btn btn-secondary btn-sm" style="width: 100%; margin-top: 10px;">
+                Continue Browsing
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 50px; text-align: center; margin: 30px 0;">
+        <div style="font-size: 3rem; margin-bottom: 12px;">🛒</div>
+        <h3 style="font-size: 1.4rem; margin-bottom: 8px;">Your Shopping Cart is Empty</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Browse our catalog and connect with peers to find textbooks for your semester.</p>
+        <a href="{{ url_for('browse') }}" class="btn btn-primary">Browse Textbooks</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

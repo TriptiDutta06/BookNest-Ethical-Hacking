@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} — BookNest{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 24px;">
+
+  <!-- Breadcrumb navigation -->
+  <div style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">
+    <a href="{{ url_for('index') }}" style="color: var(--primary);">Home</a> &gt; 
+    <a href="{{ url_for('browse') }}" style="color: var(--primary);">Browse Catalog</a> &gt; 
+    <a href="{{ url_for('browse', category=book.category) }}" style="color: var(--primary);">{{ book.category }}</a> &gt; 
+    <span>{{ book.title }}</span>
+  </div>
+
+  <!-- Book Detail Grid -->
+  <div class="book-detail-grid">
+    <!-- Left: Book Cover Artwork Preview -->
+    <div class="book-detail-cover cover-{{ book.cover_theme }}">
+      <span class="book-condition-badge badge-{{ book.condition_slug }}" style="top: 20px; right: 20px; font-size: 0.85rem; padding: 5px 12px;">
+        {{ book.condition }}
+      </span>
+      <div class="cat" style="font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 12px;">
+        {{ book.category }}
+      </div>
+      <h2 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; color: white; margin-bottom: 10px; line-height: 1.2;">
+        {{ book.title }}
+      </h2>
+      <div style="font-size: 1rem; opacity: 0.9;">By {{ book.author }}</div>
+    </div>
+
+    <!-- Right: Textbook Information & Actions -->
+    <div class="book-detail-info">
+      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+        <span class="pill" style="background: var(--bg-surface-soft); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+          {{ book.category }}
+        </span>
+        {% if book.is_available %}
+          <span style="color: var(--accent-forest); font-weight: 700; font-size: 0.85rem;">● Available for Handover</span>
+        {% else %}
+          <span style="color: #ef4444; font-weight: 700; font-size: 0.85rem;">● Currently Reserved / Sold</span>
+        {% endif %}
+      </div>
+
+      <h1>{{ book.title }}</h1>
+      <div class="book-detail-author">Author: <strong>{{ book.author }}</strong></div>
+
+      <div class="book-detail-price-box">
+        <span class="book-detail-price">₹{{ book.price }}</span>
+        <span class="book-detail-mrp">₹{{ book.original_price }}</span>
+        <span style="background: var(--primary-soft); color: var(--primary); font-size: 0.82rem; font-weight: 700; padding: 4px 10px; border-radius: var(--radius-full);">
+          Save ₹{{ book.original_price - book.price }} ({{ ((book.original_price - book.price) / book.original_price * 100) | round | int }}% OFF)
+        </span>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <h4 style="font-size: 1.05rem; margin-bottom: 8px;">About this Copy</h4>
+        <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
+          {{ book.description or "No special student annotations provided. The seller has verified that all course syllabus pages are intact and readable." }}
+        </p>
+      </div>
+
+      <!-- Seller Profile Card -->
+      <div class="seller-profile-card">
+        <div class="seller-avatar">
+          {{ book.seller_name[0] }}
+        </div>
+        <div style="flex: 1;">
+          <h4 style="font-size: 1.05rem; margin-bottom: 2px;">Listed by {{ book.seller_name }}</h4>
+          <p style="color: var(--text-secondary); font-size: 0.85rem; margin: 0;">{{ book.seller_dept }}</p>
+          <span style="font-size: 0.8rem; color: #64748b;">Verified Campus Peer • Direct handoff</span>
+        </div>
+        <div style="text-align: right;">
+          <span style="font-size: 0.8rem; color: var(--accent-forest); font-weight: 600;">✓ In-Person Meetup</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 14px; align-items: center; margin-top: 30px;">
+        {% if book.is_available %}
+          <a href="{{ url_for('cart_add', book_id=book.id) }}" class="btn btn-primary btn-lg" style="flex: 1;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            Add to Cart
+          </a>
+        {% else %}
+          <button class="btn btn-secondary btn-lg" disabled style="flex: 1; opacity: 0.6; cursor: not-allowed;">
+            Book Unavailable
+          </button>
+        {% endif %}
+
+        <a href="{{ url_for('wishlist_add', book_id=book.id) }}" class="btn btn-secondary btn-lg" title="Save for later">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          Wishlist
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

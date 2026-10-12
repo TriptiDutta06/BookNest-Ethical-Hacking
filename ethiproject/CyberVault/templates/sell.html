@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Sell a Used Book — BookNest{% endblock %}
+
+{% block content %}
+<div class="container auth-wrapper">
+  <div class="auth-card" style="max-width: 640px;">
+    <div class="auth-header">
+      <span class="hero-badge">Campus Listing</span>
+      <h1>List Your Used Textbook</h1>
+      <p>Sell course syllabus books directly to peers with zero commission</p>
+    </div>
+
+    <form action="{{ url_for('sell') }}" method="POST">
+      <div class="form-group">
+        <label for="title">Textbook Title *</label>
+        <input type="text" name="title" id="title" class="form-control" placeholder="e.g. Computer Networks: A Top-Down Approach" required>
+      </div>
+
+      <div class="form-group">
+        <label for="author">Author(s) *</label>
+        <input type="text" name="author" id="author" class="form-control" placeholder="e.g. Kurose & Ross" required>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label for="category">Subject Department *</label>
+          <select name="category" id="category" class="form-control" required>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Data Science">Data Science & AI</option>
+            <option value="Web Development">Web Development</option>
+            <option value="Engineering">Core Engineering</option>
+            <option value="Business">Business</option>
+            <option value="Mathematics">Mathematics</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="condition">Book Condition *</label>
+          <select name="condition" id="condition" class="form-control" required>
+            <option value="Like New">Like New (Unmarked / Pristine)</option>
+            <option value="Very Good" selected>Very Good (Light use / Minor notes)</option>
+            <option value="Good">Good (Readable / Normal wear)</option>
+            <option value="Fair">Fair (Heavy highlighting / Worn spine)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label for="price">Your Selling Price (₹) *</label>
+          <input type="number" name="price" id="price" class="form-control" placeholder="e.g. 350" required min="10">
+        </div>
+
+        <div class="form-group">
+          <label for="original_price">Original Book Store Price / MRP (₹)</label>
+          <input type="number" name="original_price" id="original_price" class="form-control" placeholder="e.g. 850" min="10">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Condition Notes & Course Highlights</label>
+        <textarea name="description" id="description" rows="4" class="form-control" placeholder="Mention edition, course code (e.g. CS 301), exam bookmarks, or chapter notes..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+        Post Listing on Campus Marketplace
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

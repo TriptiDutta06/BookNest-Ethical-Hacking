@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders — BookNest{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 30px;">
+  <div class="container">
+    <div style="margin-bottom: 24px;">
+      <h1 style="font-size: 2.2rem; margin-bottom: 6px;">My Campus Orders</h1>
+      <p style="color: var(--text-secondary);">Track your textbook handover appointments and view digital receipts</p>
+    </div>
+
+    {% if orders %}
+      <div class="table-card">
+        <table class="app-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date Placed</th>
+              <th>Campus Meetup Spot</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order in orders %}
+              <tr>
+                <td>
+                  <strong>#{{ order.order_number }}</strong>
+                  <div style="font-size: 0.78rem; color: var(--text-muted);">Database Record ID: {{ order.id }}</div>
+                </td>
+                <td>{{ order.created_at[:16] if order.created_at else 'Recent' }}</td>
+                <td>{{ order.delivery_location }}</td>
+                <td style="font-weight: 700; color: var(--primary);">₹{{ order.total_amount }}</td>
+                <td>
+                  <span class="pill" style="background: #dcfce7; color: #15803d; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: var(--radius-full);">
+                    {{ order.status }}
+                  </span>
+                </td>
+                <td>
+                  <a href="{{ url_for('order_detail', order_id=order.id) }}" class="btn btn-secondary btn-sm">
+                    View Details &rarr;
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 50px; text-align: center; margin: 30px 0;">
+        <div style="font-size: 3rem; margin-bottom: 12px;">📦</div>
+        <h3 style="font-size: 1.4rem; margin-bottom: 8px;">No Campus Orders Yet</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Once you request textbooks from your fellow classmates, your orders will show up here.</p>
+        <a href="{{ url_for('browse') }}" class="btn btn-primary">Browse Textbooks</a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
